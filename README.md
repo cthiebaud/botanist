@@ -4,4 +4,4 @@
 
 Musique de Christophe Thiebaud
 
-Arrangement pur piano de Benoît Urbain
+Arrangement pour piano de Benoît Urbain
