@@ -1,1 +1,7 @@
-C'est le site de « Après "Les filles du botaniste" », une composition de de Christophe Thiebaud
+*À Kitty Lam*
+
+# Après « Les filles du botaniste »
+
+Musique de Christophe Thiebaud
+
+Arrangement pur piano de Benoît Urbain
