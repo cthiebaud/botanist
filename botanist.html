@@ -9,7 +9,7 @@
 
   <title>botanist</title>
 
-  <link rel="canonical" href="https://aequologica.net/botanist.html">
+  <link rel="canonical" href="https://klam.cthiebaud.com/botanist.html">
 
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@latest/dist/css/bootstrap.min.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -29,17 +29,17 @@
   <style>
     body {
       font-family: 'Caveat', cursive;
-      font-size: 20pt;
+      font-size: 18pt;
     }
 
+    /* COLORS */
     #botanist table>thead>tr,
     #botanist table>tbody>tr:last-child {
-      background-color: #164010;
       /* Vine Green */
+      background-color: #164010;
       color: ghostwhite;
     }
 
-    /* row colors */
     #botanist table>tbody>tr.prolegomena,
     #botanist table>tbody>tr.cadentia {
       /* Old Lace */
@@ -69,7 +69,7 @@
       background-color: #FFCCCB80;
     }
 
-    /* end row colors */
+    /* end COLORS */
 
     #botanist table>thead>tr>th,
     #botanist table>tbody>tr>td {
@@ -132,7 +132,6 @@
     .clue #shootingScriptButton label {
       background-color: white;
     }
-
 
     .shooting_script #shootingScriptButton label {
       background-color: rgb(191, 191, 191);
@@ -235,7 +234,7 @@
       const hasShootingScript = typeof shootingScript !== "undefined"
       let isShootingScriptVisible = false
       const $shootingScriptButton = $('#shootingScriptButton')
-      
+
       if (hasShootingScript) {
         $shootingScriptButton.children('label').click(() => {
           isShootingScriptVisible = !isShootingScriptVisible
@@ -272,7 +271,6 @@
           const $th = $("<th>").addClass(toClass(c)).text(c)
           $tr.append($th)
         })
-
         $("#botanist table thead").append($tr)
       }
 
@@ -287,7 +285,7 @@
       }
 
       let prevDuration = 0
-      let tdDuration = undefined
+      let $tdDuration = undefined
       let lastImageName = undefined
       let noTime = false
 
@@ -321,11 +319,11 @@
               $shootingScriptDiv.append($imgWrapper)
             }
           })
-          if (tdDuration && first_time_since_start) {
+          if ($tdDuration && first_time_since_start) {
             const S = moment(prevDuration, "mm′ss″")
             const E = moment(first_time_since_start, "mm′ss″")
             const EminusS = E.diff(S) / 1000
-            tdDuration.html(`${EminusS}″`)
+            $tdDuration.html(`${EminusS}″`)
             prevDuration = first_time_since_start
           }
         }
@@ -333,14 +331,14 @@
         // insert row
         {
           const $tr = $("<tr>").addClass(value.dialectic)
-          tdDuration = $("<td>").addClass('duration')
+          $tdDuration = $("<td>").addClass('duration')
 
           $tr.append($("<td>").addClass('section').html(isLowerCase(key) ? "" : $('<h1>').text(key)))
           $tr.append($("<td>").addClass('key').html(value.keySignature ? $('<div>').append($('<img>').attr("src",
             `pianos/lilyponds/${encodeURIComponent(value.keySignature)}.svg`)) : ""))
           $tr.append($("<td>").addClass('measures').text(value.measures ? value.measures : ""))
           if (hasShootingScript) {
-            $tr.append(tdDuration)
+            $tr.append($tdDuration)
           }
           $tr.append($("<td>").addClass('clue').html(value.clue))
           if (hasShootingScript) {
