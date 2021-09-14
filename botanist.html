@@ -32,57 +32,57 @@
       font-size: 20pt;
     }
 
-    #chapters table>thead>tr,
-    #chapters table>tbody>tr:last-child {
+    #botanist table>thead>tr,
+    #botanist table>tbody>tr:last-child {
       background-color: #164010;
       /* Vine Green */
       color: ghostwhite;
     }
 
     /* row colors */
-    #chapters table>tbody>tr.prolegomena,
-    #chapters table>tbody>tr.cadentia {
+    #botanist table>tbody>tr.prolegomena,
+    #botanist table>tbody>tr.cadentia {
       /* Old Lace */
       background-color: #FCF6E180;
     }
 
-    #chapters table>tbody>tr.thesis,
-    #chapters table>tbody>tr.conclusio,
-    #chapters table>tbody>tr.conclusio {
+    #botanist table>tbody>tr.thesis,
+    #botanist table>tbody>tr.conclusio,
+    #botanist table>tbody>tr.conclusio {
       /* Eggshell */
       background-color: #E4F2D580;
     }
 
-    #chapters table>tbody>tr.antithesis,
-    #chapters table>tbody>tr.recapitulatio {
+    #botanist table>tbody>tr.antithesis,
+    #botanist table>tbody>tr.recapitulatio {
       /* Tea Green */
       background-color: #CBE8BE80;
     }
 
-    #chapters table>tbody>tr.progressus {
+    #botanist table>tbody>tr.progressus {
       /* Melon */
       background-color: #FCBABA80;
     }
 
-    #chapters table>tbody>tr.peroratio {
+    #botanist table>tbody>tr.peroratio {
       /* Light Red */
       background-color: #FFCCCB80;
     }
 
     /* end row colors */
 
-    #chapters table>thead>tr>th,
-    #chapters table>tbody>tr>td {
+    #botanist table>thead>tr>th,
+    #botanist table>tbody>tr>td {
       vertical-align: top;
     }
 
     /* key signature column */
-    #chapters table tr>td.key>div> {
+    #botanist table tr>td.key>div> {
       max-width: 60px;
       height: 50px;
     }
 
-    #chapters table tr>td.key>div>img {
+    #botanist table tr>td.key>div>img {
       width: 60px;
       height: 50px;
       object-fit: none;
@@ -95,24 +95,24 @@
       text-align: center;
     }
 
-    #chapters table>tbody>tr>td:clue {
+    #botanist table>tbody>tr>td:clue {
       max-width: 12rem;
     }
 
-    #chapters table>tbody>tr>td.shooting_script {
+    #botanist table>tbody>tr>td.shooting_script {
       max-width: 16rem;
       padding: 0;
     }
 
-    #chapters table>tbody>tr>td.shooting_script div.time_since_start:first-child {
+    #botanist table>tbody>tr>td.shooting_script div.time_since_start:first-child {
       padding: 8px 8px 8px 0;
     }
 
-    #chapters table>tbody>tr.cadentia>td.shooting_script img {
+    #botanist table>tbody>tr.cadentia>td.shooting_script img {
       padding-bottom: 8px;
     }
 
-    #chapters table>tbody>tr>td.shooting_script img {
+    #botanist table>tbody>tr>td.shooting_script img {
       display: block;
       min-width: 240px;
       width: 100%;
@@ -120,17 +120,28 @@
       padding-right: 8px;
     }
 
-    #chapters table>tbody>tr:last-child {
+    #botanist table>tbody>tr:last-child {
       font-weight: bold;
+    }
+
+    .clue #shootingScriptButton label:hover,
+    .shooting_script #shootingScriptButton label:hover {
+      background-color: #6c757d;
+    }
+
+    .clue #shootingScriptButton label {
+      background-color: white;
+    }
+
+
+    .shooting_script #shootingScriptButton label {
+      background-color: rgb(191, 191, 191);
     }
   </style>
 
   <script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@latest/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/lodash@latest/lodash.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/nunjucks@latest/browser/nunjucks.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/moment@latest/moment.min.js"></script>
-  <script src="https://kit.fontawesome.com/630ccf7ca9.js" crossorigin="anonymous"></script>
 
   <script>
     // https://stackoverflow.com/a/17772086/1070215
@@ -162,83 +173,82 @@
         'cadentia',
       ]
 
-      const chapters = {
-        /* Prolégomènes  */ 'Introduction': { clazz: "prolegomena"    , keySignature: "∅"   , measures:  2, html: "Blank." },
-        /* Thèse         */ 'A'           : { clazz: "thesis"         , keySignature: "♯♯♯" , measures: 12, html: "Memories." },
-        /* Antithèse     */ 'B'           : { clazz: "antithesis"     , keySignature: "♭♭♭" , measures: 12, html: "Stronger." },
-        /*               */ 'A′'          : { clazz: "thesis"         , keySignature: "♯♯♯" , measures: 12, html: "Decision to act." },
-        /*               */ 'B′'          : { clazz: "antithesis"     , keySignature: "♭♭♭" , measures: 13, html: "Action." },
-        /*               */ 'A″'          : { clazz: "conclusio"      , keySignature: "♯♯♯" , measures: 11, html: "Renouncement, surrendering, giving up." },
-        /* Développement */ 'Development' : { clazz: "progressus"     , keySignature: "∅"   , measures: 16, html: "Await, suspense, rising turmoil." },
-        /*               */ 'B″'          : { clazz: "recapitulatio"  , keySignature: "♭♭♭" , measures: 13, html: "Awakening, \"something must be done!\"." },
-        /*               */ 'A‴'          : { clazz: "conclusio"      , keySignature: "♯♯♯" , measures:  9, html: "Pleasant melancholy, saudade." },
-        /* Péroraison    */ 'Coda'        : { clazz: "peroratio"      , keySignature: "♯♯♯♯", measures:  4, html: "Last surge." },
-        /* Cadence       */ 'Conclusion'  : { clazz: "cadentia"       , keySignature: "♯♯♯" , measures:  3, html: "All's well that ends well." },
-        /* fin           */ 'end'         : { clazz: ""               , keySignature: ""    , measures:  0, html: "" }
-        /* all-lowercase preperties, e.g. "end", will not be displayed */
+      const sections = {
+        /* Prolégomènes  */ 'Introduction': { dialectic: "prolegomena"    , keySignature: "∅"   , measures:  2, clue: "Blank." },
+        /* Thèse         */ 'A'           : { dialectic: "thesis"         , keySignature: "♯♯♯" , measures: 12, clue: "Memories." },
+        /* Antithèse     */ 'B'           : { dialectic: "antithesis"     , keySignature: "♭♭♭" , measures: 12, clue: "Stronger." },
+        /*               */ 'A′'          : { dialectic: "thesis"         , keySignature: "♯♯♯" , measures: 12, clue: "Decision to act." },
+        /*               */ 'B′'          : { dialectic: "antithesis"     , keySignature: "♭♭♭" , measures: 13, clue: "Action." },
+        /*               */ 'A″'          : { dialectic: "conclusio"      , keySignature: "♯♯♯" , measures: 11, clue: "Renouncement, surrendering, giving up." },
+        /* Développement */ 'Development' : { dialectic: "progressus"     , keySignature: "∅"   , measures: 16, clue: "Await, suspense, rising turmoil." },
+        /*               */ 'B″'          : { dialectic: "recapitulatio"  , keySignature: "♭♭♭" , measures: 13, clue: "Awakening, \"something must be done!\"." },
+        /*               */ 'A‴'          : { dialectic: "conclusio"      , keySignature: "♯♯♯" , measures:  9, clue: "Pleasant melancholy, saudade." },
+        /* Péroraison    */ 'Coda'        : { dialectic: "peroratio"      , keySignature: "♯♯♯♯", measures:  4, clue: "Last surge." },
+        /* Cadence       */ 'Conclusion'  : { dialectic: "cadentia"       , keySignature: "♯♯♯" , measures:  3, clue: "All's well that ends well." },
+        /* fin           */ 'end'         : { dialectic: ""               , keySignature: ""    , measures:  0, clue: "" }
+        /* all-lowercase keys, e.g. "end", will not be displayed */
       }
 
       const shootingScript = {
         'Introduction': [{ "kittyBack"                             : "00′00″" }],
-        'A'          : [{ "megaCloseup"                           : "00′07″" }, 
-                        { "cordes"                                : "00′22″" }, 
-                        { "lessMegaCloseup"                       : "00′33″" }],
-        'B'          : [{ "kittyFrontTightShotFromRight"          : "00′42″" },
-                        { "roues2"                                : "00′57″" },
-                        { "kittyFrontMediumShotFromRight"         : "01′08″" }],
-        'A′'         : [{ "kittySideMediumShotFromLeft"           : "01′17″" },
-                        { "cordesBassesHorizontales"              : "01′31″" },
-                        { "closeright"                            : "01′41″" }],
-        'B′'         : [{ "fullPianoFromSouthEast"                : "01′50″" },
-                        { "pedales2"                              : "02′05″" },
-                        { "right"                                 : "02′18″" }],
-        'A″'         : [{ "counterDiveFromWestSouth"              : "02′30″" },
-                        { "marteauxInside"                        : "02′43″" },
-                        { "bottomTop"                             : "02′53″" }],
-        'Development': [{ "bottomTopBottom"                       : "02′59″" },
-                        { "leggio"                                : "03′04″" },
-                        { "verticalDiveOnKeyboard"                : "03′09″" },
-                        { "verticalDiveOnKeyboard2"               : "03′20″" },
-                        { "verticalDiveOnKeyboard3"               : "03′28″" },
-                        { "verticalDiveOnKeyboard4"               : "03′33″" },
-                        { "verticalDiveOnKeyboard5"               : "03′39″" },],
-        'B″'         : [{ "longShotCircleRightToLeft"             : "03′42″" },
-                        { "longShotCircleRightToLeft2"            : "03′48″" },
-                        { "longShotCircleRightToLeft3"            : "03′52″" },
-                        { "longShotCircleRightToLeft4"            : "03′57″" },
-                        { "longShotCircleRightToLeft5"            : "04′00″" },
-                        { "longShotCircleRightToLeft6"            : "04′04″" },
-                        { "longShotCircleRightToLeft7"            : "04′07″" },
-                        { "longShotCircleRightToLeft8"            : "04′10″" },
-                        { "longShotCircleRightToLeft9"            : "04′13″" },
-                        { "longShotCircleRightToLeft10"           : "04′16″" },],
-        'A‴'         : [{ "longShotCircleRightToLeft13"           : "04′23″" },
-                        { "diveOnSeatFromWestNorth"               : "04′39″" }],
-        'Coda'       : [{ "kittyAndPianoAmericanPlanSideFromRight": "04′51″" },
-                        { "mediumEast"                            : "04′58″" }],
-        'Conclusion' : [{ "kittyEnd"                              : "05′04″" }],
-        'end'        : [{ "_"                                     : "05′21″" }],
+        'A'           : [{ "megaCloseup"                           : "00′07″" }, 
+                         { "cordes"                                : "00′22″" }, 
+                         { "lessMegaCloseup"                       : "00′33″" }],
+        'B'           : [{ "kittyFrontTightShotFromRight"          : "00′42″" },
+                         { "roues2"                                : "00′57″" },
+                         { "kittyFrontMediumShotFromRight"         : "01′08″" }],
+        'A′'          : [{ "kittySideMediumShotFromLeft"           : "01′17″" },
+                         { "cordesBassesHorizontales"              : "01′31″" },
+                         { "closeright"                            : "01′41″" }],
+        'B′'          : [{ "fullPianoFromSouthEast"                : "01′50″" },
+                         { "pedales2"                              : "02′05″" },
+                         { "right"                                 : "02′18″" }],
+        'A″'          : [{ "counterDiveFromWestSouth"              : "02′30″" },
+                         { "marteauxInside"                        : "02′43″" },
+                         { "bottomTop"                             : "02′53″" }],
+        'Development' : [{ "bottomTopBottom"                       : "02′59″" },
+                         { "leggio"                                : "03′04″" },
+                         { "verticalDiveOnKeyboard"                : "03′09″" },
+                         { "verticalDiveOnKeyboard2"               : "03′20″" },
+                         { "verticalDiveOnKeyboard3"               : "03′28″" },
+                         { "verticalDiveOnKeyboard4"               : "03′33″" },
+                         { "verticalDiveOnKeyboard5"               : "03′39″" },],
+        'B″'          : [{ "longShotCircleRightToLeft"             : "03′42″" },
+                         { "longShotCircleRightToLeft2"            : "03′48″" },
+                         { "longShotCircleRightToLeft3"            : "03′52″" },
+                         { "longShotCircleRightToLeft4"            : "03′57″" },
+                         { "longShotCircleRightToLeft5"            : "04′00″" },
+                         { "longShotCircleRightToLeft6"            : "04′04″" },
+                         { "longShotCircleRightToLeft7"            : "04′07″" },
+                         { "longShotCircleRightToLeft8"            : "04′10″" },
+                         { "longShotCircleRightToLeft9"            : "04′13″" },
+                         { "longShotCircleRightToLeft10"           : "04′16″" },],
+        'A‴'          : [{ "longShotCircleRightToLeft13"           : "04′23″" },
+                         { "diveOnSeatFromWestNorth"               : "04′39″" }],
+        'Coda'        : [{ "kittyAndPianoAmericanPlanSideFromRight": "04′51″" },
+                         { "mediumEast"                            : "04′58″" }],
+        'Conclusion'  : [{ "kittyEnd"                              : "05′04″" }],
+        'end'         : [{ "_"                                     : "05′21″" }],
       }
       /* beautify ignore:end */
 
       const hasShootingScript = typeof shootingScript !== "undefined"
-      let showShootingScript = false
-      let $shootingScriptButton = $('<button>')
-        .attr('id', "shootingScriptButton")
-        .addClass("float-end btn btn-light btn-sm p-1 m-1")
-        .html("<img src='/svg/film-strip-or-video-svgrepo-com.svg' style='width: 40px; height:auto;'>")
-
-      $shootingScriptButton.click(() => {
-          showShootingScript = !showShootingScript
+      let isShootingScriptVisible = false
+      const $shootingScriptButton = $('#shootingScriptButton')
+      
+      if (hasShootingScript) {
+        $shootingScriptButton.children('label').click(() => {
+          isShootingScriptVisible = !isShootingScriptVisible
           $shootingScriptButton.detach()
-          if (showShootingScript) {
-            $shootingScriptButton.appendTo($("#chapters table thead tr th.shooting_script"))
-            $("#chapters table .shooting_script").show()
+          if (isShootingScriptVisible) {
+            $shootingScriptButton.appendTo($("#botanist table thead tr th.shooting_script"))
+            $("#botanist table .shooting_script").show()
           } else {
-            $shootingScriptButton.appendTo($("#chapters table thead tr th.clue"))
-            $("#chapters table .shooting_script").hide()
+            $shootingScriptButton.appendTo($("#botanist table thead tr th.clue"))
+            $("#botanist table .shooting_script").hide()
           }
         })
+      }
 
       // insert header
       {
@@ -263,19 +273,26 @@
           $tr.append($th)
         })
 
-        $("#chapters table thead").append($tr)
+        $("#botanist table thead").append($tr)
       }
 
       let sum = {
-        measures: 0
+        measures: 0,
+        addMeasures(moreMeasures) {
+          this.measures += parseFloat(moreMeasures)
+        },
+        getMeasuresAsString(d) {
+          return this.measures.toFixed(d)
+        }
       }
 
       let prevDuration = 0
       let tdDuration = undefined
       let lastImageName = undefined
       let noTime = false
-      _.forOwn(chapters, (value, key) => {
-        sum.measures = sum.measures + parseFloat(value.measures)
+
+      for (const [key, value] of Object.entries(sections)) {
+        sum.addMeasures(value.measures)
 
         const $shootingScriptDiv = $('<div>')
         if (hasShootingScript && shootingScript[key]) {
@@ -296,10 +313,12 @@
               $shootingScriptDiv.append($('<div>').addClass('time_since_start').text(time_since_start))
             }
             if (imageName !== "_") {
-              const $img = $('<div>').append($('<img>')
-                .addClass('img-fluid')
-                .attr('src', 'pianos/' + imageName + '.jpg'))
-              $shootingScriptDiv.append($img)
+              const $imgWrapper = $('<div>')
+                .append($('<img>')
+                  .addClass('img-fluid')
+                  .attr('src', 'pianos/' + imageName + '.jpg')
+                )
+              $shootingScriptDiv.append($imgWrapper)
             }
           })
           if (tdDuration && first_time_since_start) {
@@ -313,46 +332,48 @@
 
         // insert row
         {
-          const $tr = $("<tr>").addClass(value.clazz)
+          const $tr = $("<tr>").addClass(value.dialectic)
           tdDuration = $("<td>").addClass('duration')
 
-          $tr.append($("<td>").addClass('dialectics').html(isLowerCase(key) ? "" : $('<h1>').text(key)))
+          $tr.append($("<td>").addClass('section').html(isLowerCase(key) ? "" : $('<h1>').text(key)))
           $tr.append($("<td>").addClass('key').html(value.keySignature ? $('<div>').append($('<img>').attr("src",
             `pianos/lilyponds/${encodeURIComponent(value.keySignature)}.svg`)) : ""))
           $tr.append($("<td>").addClass('measures').text(value.measures ? value.measures : ""))
           if (hasShootingScript) {
             $tr.append(tdDuration)
           }
-          $tr.append($("<td>").addClass('clue').html(value.html))
+          $tr.append($("<td>").addClass('clue').html(value.clue))
           if (hasShootingScript) {
             $tr.append($("<td>").addClass('shooting_script').html($shootingScriptDiv))
           }
 
-          $("#chapters table tbody").append($tr)
+          $("#botanist table tbody").append($tr)
         }
-      })
+      }
 
-      $("#chapters tbody tr:last-child td.measures").html(sum.measures.toFixed(0))
-      $("#chapters tbody tr:last-child td.shooting_script>div>div").detach().appendTo('#chapters tbody tr:last-child td.duration')
-      $("#chapters table th .clue").append($shootingScriptButton)
-      if (showShootingScript) {
-        $("#chapters table .shooting_script").show()
-        $("#chapters table thead tr th.shooting_script").append($shootingScriptButton)
-      } else {
-        $("#chapters table .shooting_script").hide()
-        $("#chapters table thead tr th.clue").append($shootingScriptButton)
+      $("#botanist tbody tr:last-child td.measures").html(sum.getMeasuresAsString(0))
+      $("#botanist tbody tr:last-child td.shooting_script>div>div").detach().appendTo('#botanist tbody tr:last-child td.duration')
+      if (hasShootingScript) {
+        $shootingScriptButton.show()
+        $shootingScriptButton.detach()
+        if (isShootingScriptVisible) {
+          $("#botanist table .shooting_script").show()
+          $("#botanist table thead tr th.shooting_script").append($shootingScriptButton)
+        } else {
+          $("#botanist table .shooting_script").hide()
+          $("#botanist table thead tr th.clue").append($shootingScriptButton)
+        }
       }
     })
   </script>
 </head>
 
 <body>
-  <div id="chapters" class="container-lg">
-
+  <div id="botanist" class="container-lg">
     <table class="table table-responsive table-borderless table-sm caption-top">
       <caption>
         <a role="button" class="float-end btn btn-outline-secondary btn-sm p-1 m-1" href="/scores/botanist-v2.pdf" target="_score">
-          <img src="/svg/G-clef.svg" style="width:40px; height: auto;">
+          <img src="/svg/G-clef.svg" style="width:33px; height: auto;">
         </a>
         <h1 style="display: inline; white-space: nowrap;">Après « Les filles du botaniste » </h1>
       </caption>
@@ -360,6 +381,12 @@
       <tbody></tbody>
       <tfoot></tfoot>
     </table>
+    <div class="float-end" id="shootingScriptButton" style="display: none;">
+      <input class="btn-check" type="checkbox" autocomplete="off" id="qwe">
+      <label class="btn btn-sm btn-light p-0 m-1" for="qwe" autocomplete="off">
+        <img src="/svg/film-strip-or-video-svgrepo-com.svg" style="width: 36px; height: auto">
+      </label>
+    </div>
   </div>
 </body>
 
