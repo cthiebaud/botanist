@@ -104,7 +104,6 @@
       padding: 0;
     }
 
-    #chapters table>thead>tr>th.shooting_script,
     #chapters table>tbody>tr>td.shooting_script div.time_since_start:first-child {
       padding: 8px 8px 8px 0;
     }
@@ -224,6 +223,22 @@
 
       const hasShootingScript = typeof shootingScript !== "undefined"
       let showShootingScript = false
+      let $shootingScriptButton = $('<button>')
+        .attr('id', "shootingScriptButton")
+        .addClass("float-end btn btn-light btn-sm p-1 m-1")
+        .html("<img src='/svg/film-strip-or-video-svgrepo-com.svg' style='width: 40px; height:auto;'>")
+
+      $shootingScriptButton.click(() => {
+          showShootingScript = !showShootingScript
+          $shootingScriptButton.detach()
+          if (showShootingScript) {
+            $shootingScriptButton.appendTo($("#chapters table thead tr th.shooting_script"))
+            $("#chapters table .shooting_script").show()
+          } else {
+            $shootingScriptButton.appendTo($("#chapters table thead tr th.clue"))
+            $("#chapters table .shooting_script").hide()
+          }
+        })
 
       // insert header
       {
@@ -245,19 +260,6 @@
         const $tr = $("<tr>")
         columnsFiltered.forEach(c => {
           const $th = $("<th>").addClass(toClass(c)).text(c)
-          if (c === "Clue") {
-            if (hasShootingScript) {
-              $th.append($('<button>').addClass("float-end btn btn-light btn-sm p-1 m-1")
-                .click(() => {
-                  showShootingScript = !showShootingScript
-                  if (showShootingScript) {
-                    $("#chapters table .shooting_script").show()
-                  } else {
-                    $("#chapters table .shooting_script").hide()
-                  }
-                }).html("<img src='/svg/film-strip-or-video-svgrepo-com.svg' style='width: 40px; height:auto;'>"))
-            }
-          }
           $tr.append($th)
         })
 
@@ -332,21 +334,28 @@
 
       $("#chapters tbody tr:last-child td.measures").html(sum.measures.toFixed(0))
       $("#chapters tbody tr:last-child td.shooting_script>div>div").detach().appendTo('#chapters tbody tr:last-child td.duration')
+      $("#chapters table th .clue").append($shootingScriptButton)
       if (showShootingScript) {
         $("#chapters table .shooting_script").show()
+        $("#chapters table thead tr th.shooting_script").append($shootingScriptButton)
       } else {
         $("#chapters table .shooting_script").hide()
+        $("#chapters table thead tr th.clue").append($shootingScriptButton)
       }
     })
   </script>
 </head>
 
 <body>
-  <div id="chapters" class="container-lg p-0">
-    <a role="button" class="float-end btn btn-outline-secondary btn-sm p-1 m-1" href="/scores/botanist-v2.pdf" target="_score"><img src="/svg/G-clef.svg"></a>
-    <h1 style="display: inline">Après « Les filles du botaniste » </h1>
-    <table class="table table-responsive table-borderless">
-      <!-- table-striped table-hover -->
+  <div id="chapters" class="container-lg">
+
+    <table class="table table-responsive table-borderless table-sm caption-top">
+      <caption>
+        <a role="button" class="float-end btn btn-outline-secondary btn-sm p-1 m-1" href="/scores/botanist-v2.pdf" target="_score">
+          <img src="/svg/G-clef.svg" style="width:40px; height: auto;">
+        </a>
+        <h1 style="display: inline; white-space: nowrap;">Après « Les filles du botaniste » </h1>
+      </caption>
       <thead></thead>
       <tbody></tbody>
       <tfoot></tfoot>
