@@ -16,7 +16,17 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&display=swap">
 
-  <!-- 
+  <style>
+    body {
+      font-family: 'Caveat', cursive;
+      font-size: 24px;
+    }
+    #botanist table caption h1{
+      font-size: 3rem;
+    }
+    
+
+    /* COLORS 
     https://www.schemecolor.com/light-red-green-gradient.php
     #FCBABA Melon
     #FFCCCB Light Red
@@ -24,20 +34,15 @@
     #E4F2D5 Eggshell
     #CBE8BE Tea Green
     #B1D9A3 Light Moss Green
-  -->
-
-  <style>
-    body {
-      font-family: 'Caveat', cursive;
-      font-size: 18pt;
-    }
-
-    /* COLORS */
+    +
+    #164010 Vine Green (for header and footer)
+    */
     #botanist table>thead>tr,
-    #botanist table>tbody>tr:last-child {
+    #botanist table>tfoot>tr:first-child {
       /* Vine Green */
       background-color: #164010;
       color: ghostwhite;
+      font-weight: bold;
     }
 
     #botanist table>tbody>tr.prolegomena,
@@ -47,16 +52,19 @@
     }
 
     #botanist table>tbody>tr.thesis,
-    #botanist table>tbody>tr.conclusio,
     #botanist table>tbody>tr.conclusio {
       /* Eggshell */
       background-color: #E4F2D580;
     }
 
-    #botanist table>tbody>tr.antithesis,
-    #botanist table>tbody>tr.recapitulatio {
+    #botanist table>tbody>tr.antithesis {
       /* Tea Green */
       background-color: #CBE8BE80;
+    }
+
+    #botanist table>tbody>tr.recapitulatio {
+      /* Light Moss Green */
+      background-color: #B1D9A380;
     }
 
     #botanist table>tbody>tr.progressus {
@@ -104,7 +112,7 @@
       padding: 0;
     }
 
-    #botanist table>tbody>tr>td.shooting_script div.time_since_start:first-child {
+    #botanist table>tbody>tr>td.shooting_script div.time:first-child {
       padding: 8px 8px 8px 0;
     }
 
@@ -118,10 +126,6 @@
       width: 100%;
       height: auto;
       padding-right: 8px;
-    }
-
-    #botanist table>tbody>tr:last-child {
-      font-weight: bold;
     }
 
     .clue #shootingScriptButton label:hover,
@@ -183,9 +187,8 @@
         /*               */ 'B″'          : { dialectic: "recapitulatio"  , keySignature: "♭♭♭" , measures: 13, clue: "Awakening, \"something must be done!\"." },
         /*               */ 'A‴'          : { dialectic: "conclusio"      , keySignature: "♯♯♯" , measures:  9, clue: "Pleasant melancholy, saudade." },
         /* Péroraison    */ 'Coda'        : { dialectic: "peroratio"      , keySignature: "♯♯♯♯", measures:  4, clue: "Last surge." },
-        /* Cadence       */ 'Conclusion'  : { dialectic: "cadentia"       , keySignature: "♯♯♯" , measures:  3, clue: "All's well that ends well." },
-        /* fin           */ 'end'         : { dialectic: ""               , keySignature: ""    , measures:  0, clue: "" }
-        /* all-lowercase keys, e.g. "end", will not be displayed */
+        /* Cadence       */ 'Conclusion'  : { dialectic: "cadentia"       , keySignature: "♯♯♯" , measures:  3, clue: "All's well that ends well." }
+        /* all-lowercase keys will not be displayed */
       }
 
       const shootingScript = {
@@ -227,7 +230,7 @@
         'Coda'        : [{ "kittyAndPianoAmericanPlanSideFromRight": "04′51″" },
                          { "mediumEast"                            : "04′58″" }],
         'Conclusion'  : [{ "kittyEnd"                              : "05′04″" }],
-        'end'         : [{ "_"                                     : "05′21″" }],
+        'total_length'                                             : "05′21″"
       }
       /* beautify ignore:end */
 
@@ -266,12 +269,16 @@
             name !== "Duration" && name !== "Shooting Script"
         })
 
-        const $tr = $("<tr>")
+        const $headTr = $("<tr>")
+        const $footTr = $("<tr>")
         columnsFiltered.forEach(c => {
-          const $th = $("<th>").addClass(toClass(c)).text(c)
-          $tr.append($th)
+          const $headTh = $("<th>").addClass(toClass(c)).text(c)
+          $headTr.append($headTh)
+          const $footTd = $("<td>").addClass(toClass(c)).html("&nbsp;")
+          $footTr.append($footTd)
         })
-        $("#botanist table thead").append($tr)
+        $("#botanist table thead").append($headTr)
+        $("#botanist table tfoot").prepend($footTr)
       }
 
       let sum = {
@@ -281,10 +288,28 @@
         },
         getMeasuresAsString(d) {
           return this.measures.toFixed(d)
+        },
+        duration: 0,
+        addDuration(moreDurations) {
+          this.duration += parseFloat(moreDurations)
+        },
+        getDurationAsString() {
+          return moment(this.duration * 1000).format("mm′ss″");
         }
       }
 
-      let prevDuration = 0
+      function calcAndStoreDuration($element, start, end) {
+        if ($element && start && end) {
+          const S = moment(start, "mm′ss″")
+          const E = moment(end, "mm′ss″")
+          const EminusS = E.diff(S) / 1000
+          sum.addDuration(EminusS)
+          $element.html(`${EminusS}″`)
+          return end
+        }
+      }
+
+      let previousStart = "00′00″"
       let $tdDuration = undefined
       let lastImageName = undefined
       let noTime = false
@@ -294,7 +319,7 @@
 
         const $shootingScriptDiv = $('<div>')
         if (hasShootingScript && shootingScript[key]) {
-          let first_time_since_start = undefined
+          let newStart = undefined
           shootingScript[key].forEach((shot) => {
             const [imageName] = Object.keys(shot)
             if (lastImageName) {
@@ -303,12 +328,12 @@
             if (!noTime) {
               lastImageName = imageName
             }
-            const time_since_start = shot[imageName]
-            if (!first_time_since_start) {
-              first_time_since_start = time_since_start
+            const time = shot[imageName]
+            if (!newStart) {
+              newStart = time
             }
             if (!noTime) {
-              $shootingScriptDiv.append($('<div>').addClass('time_since_start').text(time_since_start))
+              $shootingScriptDiv.append($('<div>').addClass('time').text(time))
             }
             if (imageName !== "_") {
               const $imgWrapper = $('<div>')
@@ -319,12 +344,8 @@
               $shootingScriptDiv.append($imgWrapper)
             }
           })
-          if ($tdDuration && first_time_since_start) {
-            const S = moment(prevDuration, "mm′ss″")
-            const E = moment(first_time_since_start, "mm′ss″")
-            const EminusS = E.diff(S) / 1000
-            $tdDuration.html(`${EminusS}″`)
-            prevDuration = first_time_since_start
+          if ($tdDuration && newStart) {
+            previousStart = calcAndStoreDuration($tdDuration, previousStart, newStart)
           }
         }
 
@@ -349,8 +370,17 @@
         }
       }
 
-      $("#botanist tbody tr:last-child td.measures").html(sum.getMeasuresAsString(0))
-      $("#botanist tbody tr:last-child td.shooting_script>div>div").detach().appendTo('#botanist tbody tr:last-child td.duration')
+      calcAndStoreDuration($tdDuration, previousStart, shootingScript.total_length)
+      $("#botanist tfoot tr:first-child td.measures").html(sum.getMeasuresAsString(0))
+      $("#botanist tfoot tr:first-child td.duration").html(shootingScript.total_length)
+      $("#botanist tfoot tr:first-child td.clue").html($('span').css({
+        display: "none"
+      }).text(sum.getDurationAsString(2)))
+
+      if (sum.getDurationAsString(2) !== shootingScript.total_length) {
+        console.log("Σ durations [", sum.getDurationAsString(2), "] is different than total length [", shootingScript.total_length, "]")
+      }
+
       if (hasShootingScript) {
         $shootingScriptButton.show()
         $shootingScriptButton.detach()
@@ -377,7 +407,21 @@
       </caption>
       <thead></thead>
       <tbody></tbody>
-      <tfoot></tfoot>
+      <tfoot>
+        <tr>
+          <td colspan="6" class="text-end">
+            <div>
+              À Kitty Lam
+            </div>
+            <div>
+              Musique de Christophe Thiebaud
+            </div>
+            <div>
+              Arrangement pour piano de Benoît Urbain
+            </div>
+          </td>
+        </tr>
+      </tfoot>
     </table>
     <div class="float-end" id="shootingScriptButton" style="display: none;">
       <input class="btn-check" type="checkbox" autocomplete="off" id="qwe">
