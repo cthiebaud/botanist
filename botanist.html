@@ -39,53 +39,58 @@
 
     /* COLORS 
     https://www.schemecolor.com/light-red-green-gradient.php
-    #FCBABA Melon
-    #FFCCCB Light Red
-    #FCF6E1 Old Lace 
-    #E4F2D5 Eggshell
-    #CBE8BE Tea Green
-    #B1D9A3 Light Moss Green
-    +
-    #164010 Vine Green (for header and footer)
+    #FCBABA Melon             #ffbbbb Hard Candy
+    #FFCCCB Light Red         #FFCCCB Jagdwurst
+    #FCF6E1 Old Lace          #fff8e3 Pinch of Pearl
+    #E4F2D5 Eggshell          #e2f0d2 Light Greenette
+    #CBE8BE Tea Green         #c8e4b9 Iced Avocado
+    #B1D9A3 Light Moss Green  #b8dca7 Embroidered Silk
+
+    for header and footer
+    #164010 Vine Green 
+    #114609 Myrtle
+
+    for text
+    #212529 Blue Charcoal
     */
     #botanist table>thead>tr,
     #botanist table>tfoot>tr:first-child {
       /* Vine Green */
-      background-color: #164010;
+      background-color: #114609;
       color: ghostwhite;
       font-weight: bold;
     }
 
     #botanist table>tbody>tr.prolegomena,
     #botanist table>tbody>tr.cadentia {
-      /* Old Lace */
-      background-color: #FCF6E180;
+      /* Pinch of Pearl */
+      background-color: #fff8e3B0;
     }
 
     #botanist table>tbody>tr.thesis,
     #botanist table>tbody>tr.conclusio {
-      /* Eggshell */
-      background-color: #E4F2D580;
+      /* Light Greenette */
+      background-color: #e2f0d2B0;
     }
 
     #botanist table>tbody>tr.antithesis {
-      /* Tea Green */
-      background-color: #CBE8BE80;
+      /* Iced Avocado */
+      background-color: #c8e4b9B0;
     }
 
     #botanist table>tbody>tr.recapitulatio {
-      /* Light Moss Green */
-      background-color: #B1D9A380;
+      /* Embroidered Silk */
+      background-color: #b8dca7B0;
     }
 
     #botanist table>tbody>tr.progressus {
-      /* Melon */
-      background-color: #FCBABA80;
+      /* Hard Candy */
+      background-color: #ffbbbbB0;
     }
 
     #botanist table>tbody>tr.peroratio {
-      /* Light Red */
-      background-color: #FFCCCB80;
+      /* Jagdwurst */
+      background-color: #FFCCCBB0;
     }
 
     /* end COLORS */
@@ -411,7 +416,7 @@
 <body>
   <div id="botanist" class="container-lg">
     <table class="table table-responsive table-borderless table-sm caption-top">
-      <caption>
+      <caption style="padding-right: 0;">
         <div class="d-flex justify-content-between w-100">
           <div class="flex-grow-1">
             <h1 style="white-space: nowrap;">Après « Les filles du botaniste »</h1>
@@ -431,10 +436,15 @@
       <tbody></tbody>
       <tfoot>
         <tr>
-          <td colspan="6" class="text-end">
-            <div class="d-flex justify-content-between w-100">
-              <a role="button" class="ms-auto btn btn-outline-secondary btn-sm p-0" href="https://youtu.be/53zvSln5rvY" target="_youtube">
-                <img src="/svg/you-tube.svg" style="width: auto; height: 100%;">
+          <td colspan="6" class="text-end" style="padding-left: 0; padding-right: 0;">
+            <div class="d-flex justify-content-between w-100" style="position: relative;">
+              <a 
+              role="button" 
+              class="ms-auto btn btn-outline-secondary btn-sm p-2 m-1" 
+              style="position: absolute; top:0; left:0;"
+              href="https://youtu.be/53zvSln5rvY" 
+              target="_youtube">
+                <img src="/svg/cib-youtube.svg" style="width: 40px; height: 50%;">
               </a>
               <div class="flex-grow-1 text-end">
                 <div>
@@ -451,11 +461,11 @@
                 </div>
               </div>
             </div>
-
           </td>
         </tr>
       </tfoot>
     </table>
+
     <div class="float-end" id="shootingScriptButton" style="display: none;">
       <input class="btn-check" type="checkbox" autocomplete="off" id="shootingScriptInput">
       <label class="btn btn-sm btn-light p-0 m-1" for="shootingScriptInput" style="border: none;">
