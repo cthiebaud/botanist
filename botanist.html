@@ -22,17 +22,20 @@
       font-size: 24px;
       color: #212529;
     }
+
     #botanist {
       padding: 0;
     }
+
     #botanist table caption {
       padding: .25rem;
     }
+
     #botanist table caption h1 {
       font-size: 36px;
       color: #212529;
     }
-    
+
 
     /* COLORS 
     https://www.schemecolor.com/light-red-green-gradient.php
@@ -279,10 +282,11 @@
 
         const $headTr = $("<tr>")
         const $footTr = $("<tr>")
-        columnsFiltered.forEach(c => {
-          const $headTh = $("<th>").addClass(toClass(c)).text(c)
+        columnsFiltered.forEach(column => {
+          const clazz = toClass(column)
+          const $headTh = $("<th>").addClass(clazz).text(column)
           $headTr.append($headTh)
-          const $footTd = $("<td>").addClass(toClass(c)).html("&nbsp;")
+          const $footTd = $("<td>").addClass(clazz)
           $footTr.append($footTd)
         })
         $("#botanist table thead").append($headTr)
