@@ -301,7 +301,7 @@
         },
 
         timeCursor: 0,
-        setTimeCursorFromStringReturnDurationAsString(end) {
+        setTimeCursorFromStringReturnsDurationAsString(end) {
           let duration = 0
           if (end) {
             const parsedEnd = moment(end, "mm′ss″")
@@ -320,7 +320,7 @@
       let hideTime = false
 
       for (const [key, value] of Object.entries(sections)) {
-        // bump measures
+        // increment measures
         Sum.addMeasures(value.measures)
 
         // build shooting script 
@@ -349,8 +349,8 @@
               )
             $shootingScriptDiv.append($imgWrapper)
           })
-          if ($tdDuration && firstTime) {
-            $tdDuration.text(Sum.setTimeCursorFromStringReturnDurationAsString(firstTime))
+          if ($tdDuration) {
+            $tdDuration.text(Sum.setTimeCursorFromStringReturnsDurationAsString(firstTime))
           }
         }
 
@@ -376,8 +376,8 @@
       }
 
       $("#botanist table tfoot tr td.measures").html(Sum.getMeasuresAsString())
-      if ($tdDuration && hasShootingScript && shootingScript.total_length) {
-        $tdDuration.text(Sum.setTimeCursorFromStringReturnDurationAsString(shootingScript.total_length))
+      if ($tdDuration && hasShootingScript) {
+        $tdDuration.text(Sum.setTimeCursorFromStringReturnsDurationAsString(shootingScript.total_length))
         $("#botanist table tfoot tr td.duration").html(Sum.getTimeCursorAsString())
         $("#botanist table tfoot tr td.clue").html($('span').css({
           display: "none"
