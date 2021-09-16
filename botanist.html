@@ -186,17 +186,17 @@
       ]
 
       const sections = {
-        /* Prolégomènes  */ 'Introduction': { dialectic: "prolegomena"    , keySignature: "∅"   , measures:  2, clue: "Blank." },
-        /* Thèse         */ 'A'           : { dialectic: "thesis"         , keySignature: "♯♯♯" , measures: 12, clue: "Memories." },
-        /* Antithèse     */ 'B'           : { dialectic: "antithesis"     , keySignature: "♭♭♭" , measures: 12, clue: "Stronger." },
-        /*               */ 'A′'          : { dialectic: "thesis"         , keySignature: "♯♯♯" , measures: 12, clue: "Decision to act." },
-        /*               */ 'B′'          : { dialectic: "antithesis"     , keySignature: "♭♭♭" , measures: 13, clue: "Action." },
-        /*               */ 'A″'          : { dialectic: "conclusio"      , keySignature: "♯♯♯" , measures: 11, clue: "Renouncement, surrendering, giving up." },
-        /* Développement */ 'Development' : { dialectic: "progressus"     , keySignature: "∅"   , measures: 16, clue: "Await, suspense, rising turmoil." },
-        /*               */ 'B″'          : { dialectic: "recapitulatio"  , keySignature: "♭♭♭" , measures: 13, clue: "Awakening, \"something must be done!\"." },
-        /*               */ 'A‴'          : { dialectic: "conclusio"      , keySignature: "♯♯♯" , measures:  9, clue: "Pleasant melancholy, saudade." },
-        /* Péroraison    */ 'Coda'        : { dialectic: "peroratio"      , keySignature: "♯♯♯♯", measures:  4, clue: "Last surge." },
-        /* Cadence       */ 'Conclusion'  : { dialectic: "cadentia"       , keySignature: "♯♯♯" , measures:  3, clue: "All's well that ends well." }
+        'Introduction': { dialectic: "prolegomena"    , keySignature: "∅"   , measures:  2, clue: "Blank." },
+        'A'           : { dialectic: "thesis"         , keySignature: "♯♯♯" , measures: 12, clue: "Memories." },
+        'B'           : { dialectic: "antithesis"     , keySignature: "♭♭♭" , measures: 12, clue: "Stronger." },
+        'A′'          : { dialectic: "thesis"         , keySignature: "♯♯♯" , measures: 12, clue: "Decision to act." },
+        'B′'          : { dialectic: "antithesis"     , keySignature: "♭♭♭" , measures: 13, clue: "Action." },
+        'A″'          : { dialectic: "conclusio"      , keySignature: "♯♯♯" , measures: 11, clue: "Renouncement, surrendering, giving up." },
+        'Development' : { dialectic: "progressus"     , keySignature: "∅"   , measures: 16, clue: "Await, suspense, rising turmoil." },
+        'B″'          : { dialectic: "recapitulatio"  , keySignature: "♭♭♭" , measures: 13, clue: "Awakening, \"something must be done!\"." },
+        'A‴'          : { dialectic: "conclusio"      , keySignature: "♯♯♯" , measures:  9, clue: "Pleasant melancholy, saudade." },
+        'Coda'        : { dialectic: "peroratio"      , keySignature: "♯♯♯♯", measures:  4, clue: "Last surge." },
+        'Conclusion'  : { dialectic: "cadentia"       , keySignature: "♯♯♯" , measures:  3, clue: "All's well that ends well." }
         /* all-lowercase keys will not be displayed */
       }
 
@@ -243,9 +243,9 @@
       }
       /* beautify ignore:end */
 
-      const hasShootingScript = typeof shootingScript !== "undefined"
-      let isShootingScriptVisible = false
+      const hasShootingScript = (typeof shootingScript !== "undefined")
       const $shootingScriptButton = $('#shootingScriptButton')
+      let isShootingScriptVisible = false
 
       if (hasShootingScript) {
         $shootingScriptButton.children('label').click(() => {
@@ -291,85 +291,80 @@
         $("#botanist table tfoot").prepend($footTr)
       }
 
-      let sum = {
+      let Sum = {
         measures: 0,
         addMeasures(moreMeasures) {
           this.measures += parseFloat(moreMeasures)
         },
-        getMeasuresAsString(d) {
-          return this.measures.toFixed(d)
+        getMeasuresAsString() {
+          return this.measures.toFixed(0)
         },
-        duration: 0,
-        addDuration(moreDurations) {
-          this.duration += parseFloat(moreDurations)
+
+        timeCursor: 0,
+        setTimeCursorFromStringReturnDurationAsString(end) {
+          let duration = 0
+          if (end) {
+            const parsedEnd = moment(end, "mm′ss″")
+            duration = parsedEnd.diff(this.timeCursor)
+          }
+          this.timeCursor += duration
+          return moment(duration).format("mm′ss″");
         },
-        getDurationAsString() {
-          return moment(this.duration * 1000).format("mm′ss″");
-        }
+        getTimeCursorAsString() {
+          return moment(this.timeCursor).format("mm′ss″");
+        },
       }
 
-      function calcAndStoreDuration($element, start, end) {
-        if ($element && start && end) {
-          const S = moment(start, "mm′ss″")
-          const E = moment(end, "mm′ss″")
-          const EminusS = E.diff(S) / 1000
-          sum.addDuration(EminusS)
-          $element.html(`${EminusS}″`)
-          return end
-        }
-      }
-
-      let previousStart = "00′00″"
       let $tdDuration = undefined
       let lastImageName = undefined
-      let noTime = false
+      let hideTime = false
 
       for (const [key, value] of Object.entries(sections)) {
-        sum.addMeasures(value.measures)
+        // bump measures
+        Sum.addMeasures(value.measures)
 
+        // build shooting script 
         const $shootingScriptDiv = $('<div>')
         if (hasShootingScript && shootingScript[key]) {
-          let newStart = undefined
+          let firstTime = undefined
           shootingScript[key].forEach((shot) => {
             const [imageName] = Object.keys(shot)
             if (lastImageName) {
-              noTime = imageName.startsWith(lastImageName)
+              hideTime = imageName.startsWith(lastImageName)
             }
-            if (!noTime) {
+            if (!hideTime) {
               lastImageName = imageName
             }
             const time = shot[imageName]
-            if (!newStart) {
-              newStart = time
+            if (!firstTime) {
+              firstTime = time
             }
-            if (!noTime) {
+            if (!hideTime) {
               $shootingScriptDiv.append($('<div>').addClass('time').text(time))
             }
-            if (imageName !== "_") {
-              const $imgWrapper = $('<div>')
-                .append($('<img>')
-                  .addClass('img-fluid')
-                  .attr('src', 'pianos/' + imageName + '.jpg')
-                )
-              $shootingScriptDiv.append($imgWrapper)
-            }
+            const $imgWrapper = $('<div>')
+              .append($('<img>')
+                .addClass('img-fluid')
+                .attr('src', 'pianos/' + imageName + '.jpg')
+              )
+            $shootingScriptDiv.append($imgWrapper)
           })
-          if ($tdDuration && newStart) {
-            previousStart = calcAndStoreDuration($tdDuration, previousStart, newStart)
+          if ($tdDuration && firstTime) {
+            $tdDuration.text(Sum.setTimeCursorFromStringReturnDurationAsString(firstTime))
           }
         }
 
         // insert row
         {
           const $tr = $("<tr>").addClass(value.dialectic)
-          $tdDuration = $("<td>").addClass('duration')
 
           $tr.append($("<td>").addClass('section').html(isLowerCase(key) ? "" : $('<h1>').text(key)))
           $tr.append($("<td>").addClass('key').html(value.keySignature ? $('<div>').append($('<img>').attr("src",
             `pianos/lilyponds/${encodeURIComponent(value.keySignature)}.svg`)) : ""))
           $tr.append($("<td>").addClass('measures').text(value.measures ? value.measures : ""))
           if (hasShootingScript) {
-            $tr.append($tdDuration)
+            $tdDuration = $("<td>").addClass('duration')
+            $tr.append($tdDuration) // will be fed during next iteration, or after exit loop
           }
           $tr.append($("<td>").addClass('clue').html(value.clue))
           if (hasShootingScript) {
@@ -380,15 +375,16 @@
         }
       }
 
-      calcAndStoreDuration($tdDuration, previousStart, shootingScript.total_length)
-      $("#botanist tfoot tr:first-child td.measures").html(sum.getMeasuresAsString(0))
-      $("#botanist tfoot tr:first-child td.duration").html(shootingScript.total_length)
-      $("#botanist tfoot tr:first-child td.clue").html($('span').css({
-        display: "none"
-      }).text(sum.getDurationAsString(2)))
-
-      if (sum.getDurationAsString(2) !== shootingScript.total_length) {
-        console.log("Σ durations [", sum.getDurationAsString(2), "] is different than total length [", shootingScript.total_length, "]")
+      $("#botanist table tfoot tr td.measures").html(Sum.getMeasuresAsString())
+      if ($tdDuration && hasShootingScript && shootingScript.total_length) {
+        $tdDuration.text(Sum.setTimeCursorFromStringReturnDurationAsString(shootingScript.total_length))
+        $("#botanist table tfoot tr td.duration").html(Sum.getTimeCursorAsString())
+        $("#botanist table tfoot tr td.clue").html($('span').css({
+          display: "none"
+        }).text(shootingScript.total_length))
+        if (Sum.getTimeCursorAsString() !== shootingScript.total_length) {
+          console.log("Σ durations [", Sum.getTimeCursorAsString(), "] is different than total length [", shootingScript.total_length, "]")
+        }
       }
 
       if (hasShootingScript) {
