@@ -30,7 +30,7 @@
     #21421e Myrtle
 
     for text
-    #212925 Midnight Moss | #262c2a Jet Set
+    #262c2a Jet Set
     */
 
     body {
@@ -92,10 +92,9 @@
       background-color: #ffcccb90;
     }
 
-    /* end COLORS */
-
     #botanist table>thead>tr>th,
-    #botanist table>tbody>tr>td {
+    #botanist table>tbody>tr>td,
+    #botanist table>tfoot>tr>td {
       vertical-align: top;
     }
 
@@ -112,14 +111,9 @@
       object-position: 0 0;
     }
 
-    /* centered text */
-    .measures,
-    .duration {
+    #botanist table .measures,
+    #botanist table .duration {
       text-align: center;
-    }
-
-    #botanist table>tbody>tr>td:clue {
-      max-width: 12rem;
     }
 
     #botanist table>tbody>tr>td.shooting_script {
@@ -131,10 +125,6 @@
       padding: 8px 8px 8px 0;
     }
 
-    #botanist table>tbody>tr.cadentia>td.shooting_script img {
-      padding-bottom: 8px;
-    }
-
     #botanist table>tbody>tr>td.shooting_script img {
       display: block;
       min-width: 240px;
@@ -143,17 +133,21 @@
       padding-right: 8px;
     }
 
-    .clue #shootingScriptButton label:hover,
-    .shooting_script #shootingScriptButton label:hover {
-      background-color: #6c757d;
+    #botanist table>tbody>tr:last-child>td.shooting_script img {
+      padding-bottom: 8px;
     }
 
-    .clue #shootingScriptButton label {
+    #botanist table>thead>tr>th.c.clue #shootingScriptButton label {
       background-color: ghostwhite;
     }
 
-    .shooting_script #shootingScriptButton label {
+    #botanist table>thead>tr>th.c.shooting_script #shootingScriptButton label {
       background-color: rgb(191, 191, 191);
+    }
+
+    #botanist table>thead>tr>th.clue #shootingScriptButton label:hover,
+    #botanist table>thead>tr>th.c.shooting_script #shootingScriptButton label:hover {
+      background-color: #6c757d;
     }
   </style>
 
