@@ -21,19 +21,18 @@
   <title>Lam & Thiebaud</title>
   <style>
     body {
-      /* 
-      font-family: 'Playfair Display', serif; 
-      font-family: 'EB Garamond', serif;
-      */
       font-family: 'Cormorant', serif;
-      background-color: #212529;
       color: ghostwhite;
+      height: 100vh;
+      background: url('lam2.jpg') no-repeat center top fixed;
+      background-color: black;
+      background-size: cover;
+      backdrop-filter: blur(10px) saturate(2);
     }
-    /* 
-    h1 {
-      font-weight: 900;
+
+    .table>:not(caption)>*>* {
+      background-color: transparent;
     }
-    */
 
     th {
       width: 50%;
@@ -51,18 +50,13 @@
 </head>
 
 <body>
-  <!--
-  <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <div>
-      &nbsp;
+  <main class="container-responsive">
+    <div style="display:block; text-align: right;">
+      <a href="botanist.html"><img src="svg/external-link.svg" style="width: 32px; height: auto; margin: 0.5rem;"></a>
     </div>
-  </nav>
-  -->
-  <main class="container-lg">
-    <a class="navbar-brand text-center" href="/botanist.html" style="display:block; margin-top: 1rem;"></a>
     <h4 class="text-center" style="font-style: italic;">À Kitty Lam.</h4>
     <h1 class="text-center">Après « Les filles du botaniste »</h1>
-    <table class="table table-dark table-borderless my-5">
+    <table class="table table-dark table-borderless table-sm my-5">
       <tr>
         <th>
           <h4>Musique</h4>
@@ -96,7 +90,6 @@
         </td>
       </tr>
     </table>
-    <h4 class="text-center" style="font-style: italic;"><a href="botanist.html"><img src="svg/external-link.svg" style="width: 64px; height: auto;" ></a></h4>
   </main>
 </body>
 
