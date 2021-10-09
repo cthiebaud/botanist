@@ -20,6 +20,10 @@
 
   <title>Lam & Thiebaud</title>
   <style>
+    a {
+      text-decoration: none;
+      color: ghostwhite;
+    }
     body {
       font-family: 'Cormorant', serif;
       color: ghostwhite;
@@ -49,8 +53,8 @@
   </style>
 </head>
 
-<body>
-  <main class="container-responsive">
+<body class="d-flex flex-column vh-100">
+  <main class="container-responsive flex-shrink-0">
     <div style="display:block; text-align: right;">
       <a href="botanist.html"><img src="svg/external-link.svg" style="width: 32px; height: auto; margin: 0.5rem;"></a>
     </div>
@@ -62,7 +66,7 @@
           <h4>Musique</h4>
         </th>
         <td>
-          <h4>Christophe Thiebaud</h4>
+          <h4>Christophe Thiebaud <a href="#mozart">¹</a></h4>
         </td>
       </tr>
       <tr>
@@ -91,6 +95,11 @@
       </tr>
     </table>
   </main>
+  <footer class="footer mt-auto py-3">
+    <div class="container-responsive text-center" id="mozart">
+      <span style="_font-size: larger;">1. Avec la contribution décisive de Wolfgang Amadeus Mozart et Franz Xaver Süßmayr : la mélodie du développement est copiée verbatim de la partie de violon du 'Domine Jesu' de leur requiem, mesure 44.</span>
+    </div>
+  </footer>  
 </body>
 
 </html>
