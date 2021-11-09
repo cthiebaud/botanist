@@ -718,6 +718,7 @@ theMusic = {
     dedication = #"A Kitty Lam"
     % tagline = #"tagline goes at the bottom of the last page"
     instrument = #"Piano"
+    copyright = "ISWC: T-307.275.654.4"
   }
 
   \score {
